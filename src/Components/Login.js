@@ -13,7 +13,7 @@ const Login = ({onLogin}) => {
       const password = passwordRef.current.value;
   
       try {
-        const response = await fetch('http://localhost:3030/api/login', {
+        const response = await fetch(process.env.API_URL+'login', {
           method: 'POST', // Use POST to send data
           headers: {
             'Content-Type': 'application/json', // Specify JSON format
