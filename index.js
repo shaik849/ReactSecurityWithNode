@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const serverless = require('serverless-http');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -21,6 +22,4 @@ mongoose.connect(process.env.DB_URL).then(() => {
 }).catch(err => {console.error(err);});
 
 app.use('/api', authRouter);
-app.listen(process.env.PORT || 3030, () =>{
-    console.log('listening on port '+process.env.PORT);
-})
+module.exports.handler = serverless(app);
