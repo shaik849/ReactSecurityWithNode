@@ -1,0 +1,9 @@
+[build]
+  functions = "."  # Use the current directory as the function directory
+  command = "npm install"  # Command to run before the build
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/index/:splat"  # Redirect API calls to your function
+  status = 200
+  force = true
