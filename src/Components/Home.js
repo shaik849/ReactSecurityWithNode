@@ -15,7 +15,7 @@ export default function Home({ onLogout }) {
             }
 
             try {
-                const response = await fetch('http://localhost:3030/api/profile', {
+                const response = await fetch(process.env.REACT_APP_API_URL+'profile', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

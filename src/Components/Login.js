@@ -5,15 +5,12 @@ const Login = ({onLogin}) => {
     const [data, setData] = useState(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
-    
-    // console.log(data);
 
     const fetchData = async () => {
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
-  
       try {
-        const response = await fetch(process.env.API_URL+'login', {
+        const response = await fetch(process.env.REACT_APP_API_URL+'login', {
           method: 'POST', // Use POST to send data
           headers: {
             'Content-Type': 'application/json', // Specify JSON format
@@ -76,8 +73,6 @@ const Login = ({onLogin}) => {
             alert(`Email: ${email}, Password: ${password}`);
             // isLog();
             fetchData();
-            console.log(data)
-            
             return true;
         }
     };
