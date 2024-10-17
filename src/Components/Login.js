@@ -1,7 +1,10 @@
 import React, { useRef, useState } from 'react';
 
 const Login = ({ onLogin }) => {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(null); // Store login response data
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [formError, setFormError] = useState('');
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
@@ -22,27 +25,31 @@ const Login = ({ onLogin }) => {
 
             const jsonData = await response.json();
             setData(jsonData); // Store response data in state
+
             if (jsonData.token) {
                 // Store the token in localStorage
                 localStorage.setItem('token', jsonData.token);
-                // Navigate to the home page
-                onLogin();
+                // Clear form errors and set success message
+                setEmailError('');
+                setPasswordError('');
+                setFormError('');
+                onLogin(); // Navigate to the home page
             } else {
-                alert('Login failed. Please check your credentials.');
+                setFormError(jsonData.message || 'Incorrect credentials. Please check your email and password.');
             }
         } catch (error) {
             console.error('Error fetching data:', error);
+            setFormError('An error occurred. Please try again.');
         }
     };
 
     const submitButton = (e) => {
         e.preventDefault(); // Prevent the form from submitting
-
+        setData(null); // Clear previous data on new submit
         let isValid = true;
-
-        // Reset border styles
-        emailRef.current.style.borderColor = '';
-        passwordRef.current.style.borderColor = '';
+        setEmailError('');
+        setPasswordError('');
+        setFormError('');
 
         // Retrieve values from the input fields
         const email = emailRef.current.value.trim();
@@ -50,21 +57,17 @@ const Login = ({ onLogin }) => {
 
         // Perform validation
         if (email === '') {
-            emailRef.current.style.borderColor = 'red';
+            setEmailError('Email is required');
             isValid = false;
         }
 
         if (password === '') {
-            passwordRef.current.style.borderColor = 'red';
+            setPasswordError('Password is required');
             isValid = false;
         }
 
-        if (!isValid) {
-            alert('Please enter both email and password');
-            return false;
-        } else {
+        if (isValid) {
             fetchData(); // Call fetchData when validation passes
-            return true;
         }
     };
 
@@ -95,9 +98,11 @@ const Login = ({ onLogin }) => {
                                     name="email"
                                     type="email"
                                     autoComplete="email"
-                                    required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${emailError ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                                 />
+                                {emailError && (
+                                    <p className="text-red-500 text-xs mt-2">{emailError}</p>
+                                )}
                             </div>
                         </div>
 
@@ -114,9 +119,11 @@ const Login = ({ onLogin }) => {
                                     name="password"
                                     type="password"
                                     autoComplete="current-password"
-                                    required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${passwordError ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
                                 />
+                                {passwordError && (
+                                    <p className="text-red-500 text-xs mt-2">{passwordError}</p>
+                                )}
                             </div>
                         </div>
 
@@ -130,10 +137,17 @@ const Login = ({ onLogin }) => {
                         </div>
                     </form>
 
-                    {/* Display response data if available */}
-                    {data && (
-                        <div className="mt-4 bg-red">
-                            <pre>{data.error}</pre> {/* Display data nicely */}
+                    {/* Display error if login fails */}
+                    {formError && (
+                        <div className="mt-4 bg-red-100 text-red-600 text-center py-2 rounded">
+                            {formError}
+                        </div>
+                    )}
+
+                    {/* Display success message if login succeeds */}
+                    {data && data.token && (
+                        <div className="mt-4 bg-green-100 text-green-600 text-center py-2 rounded">
+                            Welcome, {emailRef.current.value}!
                         </div>
                     )}
                 </div>
