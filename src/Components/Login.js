@@ -132,8 +132,8 @@ const Login = ({ onLogin }) => {
 
                     {/* Display response data if available */}
                     {data && (
-                        <div className="mt-4">
-                            <pre>{JSON.stringify(data, null, 2)}</pre> {/* Display data nicely */}
+                        <div className="mt-4 bg-red">
+                            <pre>{data.error}</pre> {/* Display data nicely */}
                         </div>
                     )}
                 </div>

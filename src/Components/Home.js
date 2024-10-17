@@ -40,9 +40,9 @@ export default function Home({ onLogout }) {
 
         fetchProfile(); // Call the fetchProfile function
     }, [token, onLogout]); // Run this effect when the component mounts or token changes
-
+    const fullName = name?.data ? `${name.data.firstName} ${name.data.lastName}` : "User"; // Default to "User" if no name found
     if (loading) return <h1>Loading...</h1>; // Show loading state
-
+   
     return (
         <div>
             {error && <h1 className="text-red-500">{error}</h1>} {/* Show error if present */}
@@ -82,10 +82,10 @@ export default function Home({ onLogout }) {
                 <div className="grid place-items-center sm:mt-20">
                     <img className="sm:w-96 w-48" src="https://i.ibb.co/2M7rtLk/Remote1.png" alt="image2" />
                 </div>
-
+          
                 {name && (
                     <h1 className="text-center text-2xl sm:text-5xl py-10 font-medium">
-                        {name?.data?.firstName + " " + name?.data?.lastName}
+                     {fullName}
                     </h1>
                 )}
             </div>
