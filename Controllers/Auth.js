@@ -12,7 +12,7 @@ const signUp = async (req, res) => {
         if (allUsers.length>0) {
             return res.status(400).json({ status: 'error', message: 'Email already exists' })
         }
-        console.log(allUsers.length)
+        // console.log(allUsers.length)
         const user = new userSchema({
             firstName: userData.firstName,
             lastName: userData.lastName,
@@ -48,7 +48,7 @@ const login = async (req, res) => {
                 },
                 process.env.SECURITY_KEY,
                 {
-                    expiresIn: '1m',
+                    expiresIn: '1d',
                 }
             );
             return res.status(200).json({ status: 'ok', data: 'Login Successful', token: token })
