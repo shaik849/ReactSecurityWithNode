@@ -32,8 +32,6 @@ const signUp = async (req, res) => {
 const login = async (req, res) => {
     try {
         let userData = req.body
-        console.log(userData)
-        console.log(!userData);
         if (Object.keys(userData).length === 0) { return res.status(400).json({ status: 'error', message: 'Provide all details' }) }
         const user = await userSchema.findOne({ email: userData.email })
         if (!user) { return res.status(400).json({ status: 'error', message: 'User not found' }) }
