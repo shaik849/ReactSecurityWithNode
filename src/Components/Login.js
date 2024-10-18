@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
+// import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const Login = ({ onLogin }) => {
+const Login = ({onLogin}) => {
+    // Initialize navigate
     const [data, setData] = useState(null); // Store login response data
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
@@ -13,27 +15,26 @@ const Login = ({ onLogin }) => {
         const password = passwordRef.current.value;
         try {
             const response = await fetch(process.env.REACT_APP_API_URL + 'login', {
-                method: 'POST', // Use POST to send data
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Specify JSON format
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email, // Send email
-                    password, // Send password
+                    email,
+                    password,
                 }),
             });
 
             const jsonData = await response.json();
-            setData(jsonData); // Store response data in state
+            setData(jsonData);
 
             if (jsonData.token) {
-                // Store the token in localStorage
                 localStorage.setItem('token', jsonData.token);
-                // Clear form errors and set success message
                 setEmailError('');
                 setPasswordError('');
                 setFormError('');
-                onLogin(); // Navigate to the home page
+                onLogin(); // Call parent onLogin function
+                // navigate('/'); // Redirect to profile page
             } else {
                 setFormError(jsonData.message || 'Incorrect credentials. Please check your email and password.');
             }
@@ -44,18 +45,16 @@ const Login = ({ onLogin }) => {
     };
 
     const submitButton = (e) => {
-        e.preventDefault(); // Prevent the form from submitting
-        setData(null); // Clear previous data on new submit
+        e.preventDefault();
+        setData(null);
         let isValid = true;
         setEmailError('');
         setPasswordError('');
         setFormError('');
 
-        // Retrieve values from the input fields
         const email = emailRef.current.value.trim();
         const password = passwordRef.current.value.trim();
 
-        // Perform validation
         if (email === '') {
             setEmailError('Email is required');
             isValid = false;
@@ -67,7 +66,7 @@ const Login = ({ onLogin }) => {
         }
 
         if (isValid) {
-            fetchData(); // Call fetchData when validation passes
+            fetchData();
         }
     };
 
@@ -137,14 +136,12 @@ const Login = ({ onLogin }) => {
                         </div>
                     </form>
 
-                    {/* Display error if login fails */}
                     {formError && (
                         <div className="mt-4 bg-red-100 text-red-600 text-center py-2 rounded">
                             {formError}
                         </div>
                     )}
 
-                    {/* Display success message if login succeeds */}
                     {data && data.token && (
                         <div className="mt-4 bg-green-100 text-green-600 text-center py-2 rounded">
                             Welcome, {emailRef.current.value}!

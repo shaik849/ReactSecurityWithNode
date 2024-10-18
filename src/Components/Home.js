@@ -40,7 +40,7 @@ export default function Home({ onLogout }) {
 
         fetchProfile(); // Call the fetchProfile function
     }, [token, onLogout]); // Run this effect when the component mounts or token changes
-    const fullName = name?.data ? `${name.data.firstName} ${name.data.lastName}` : "User"; // Default to "User" if no name found
+    // const fullName = name?.data ? `${name.data.firstName} ${name.data.lastName}` : "User"; // Default to "User" if no name found
     if (loading) return <h1>Loading...</h1>; // Show loading state
    
     return (
@@ -85,7 +85,7 @@ export default function Home({ onLogout }) {
           
                 {name && (
                     <h1 className="text-center text-2xl sm:text-5xl py-10 font-medium">
-                     {fullName}
+                     {name?.data?.firstName} {name?.data?.lastName}
                     </h1>
                 )}
             </div>

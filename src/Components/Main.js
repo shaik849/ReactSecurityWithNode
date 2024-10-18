@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Home from './Home';
-import Login from './Login';
+import FormsComponent from './FormsComponent';
 
 const Main = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
-
+ 
+    const handleLogin = () => {
+        setIsLoggedIn(true);
+    };
     useEffect(() => {
         // Check if token exists and is valid
         const token = localStorage.getItem('token');
@@ -14,21 +17,17 @@ const Main = () => {
         }
     }, []);
 
-    const handleLogin = () => {
-        setIsLoggedIn(true);
-    };
-
     const handleLogout = () => {
         localStorage.removeItem('token'); // Remove token from localStorage
         setIsLoggedIn(false);
     };
-
     return (
         <div>
             {isLoggedIn ? (
                 <Home onLogout={handleLogout} />
             ) : (
-                <Login onLogin={handleLogin} />
+                // <Login onLogin={handleLogin} />
+                <FormsComponent onLogin={handleLogin} />
             )}
         </div>
     );
